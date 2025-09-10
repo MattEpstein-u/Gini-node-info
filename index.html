@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Decision Tree Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌸 Iris Decision Tree</h1>
+            <p>Visualization of a decision tree trained on the Iris dataset</p>
+        </header>
+
+        <main>
+            <div class="tree-section">
+                <div id="treeVisualization" class="tree-container">
+                    <!-- Root Node -->
+                    <div class="tree-level level-0">
+                        <div class="tree-node root-node bubble">
+                            <div class="node-content">
+                                <div class="condition">Petal Length ≤ 2.45?</div>
+                                <div class="node-stats">150 samples</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Level 1 Nodes -->
+                    <div class="tree-level level-1">
+                        <div class="tree-node leaf-node setosa bubble">
+                            <div class="node-content">
+                                <div class="species">🌸 Setosa</div>
+                                <div class="node-stats">50 samples<br>100% pure</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tree-node decision-node bubble">
+                            <div class="node-content">
+                                <div class="condition">Petal Width ≤ 1.75?</div>
+                                <div class="node-stats">100 samples</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Level 2 Nodes -->
+                    <div class="tree-level level-2">
+                        <div class="spacer-node"></div>
+                        
+                        <div class="tree-node decision-node bubble">
+                            <div class="node-content">
+                                <div class="condition">Petal Length ≤ 4.95?</div>
+                                <div class="node-stats">54 samples</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tree-node leaf-node virginica bubble">
+                            <div class="node-content">
+                                <div class="species">🌷 Virginica</div>
+                                <div class="node-stats">46 samples<br>97.8% pure</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Level 3 Branches (only from middle node) -->
+                    </div>
+                    
+                    <!-- Level 3 Nodes -->                    <!-- Level 3 Nodes -->
+                    <div class="tree-level level-3">
+                        <div class="spacer-node"></div>
+                        
+                        <div class="tree-node leaf-node versicolor bubble">
+                            <div class="node-content">
+                                <div class="species">🌺 Versicolor</div>
+                                <div class="node-stats">48 samples<br>97.9% pure</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tree-node leaf-node virginica bubble">
+                            <div class="node-content">
+                                <div class="species">🌷 Virginica</div>
+                                <div class="node-stats">6 samples<br>66.7% pure</div>
+                            </div>
+                        </div>
+                        
+                        <div class="spacer-node"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-panel">
+                <div class="panel-header">
+                    <h2>📊 Node Analysis</h2>
+                    <p>Click on any node to see detailed Gini impurity calculations</p>
+                </div>
+                
+                <div class="panel-content" id="panelContent">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">🌳</div>
+                        <h3>Welcome to the Decision Tree Explorer!</h3>
+                        <p>Click on any bubble in the tree to explore:</p>
+                        <ul>
+                            <li>📊 Class distribution charts</li>
+                            <li>🧮 Step-by-step Gini calculations</li>
+                            <li>📈 Node purity analysis</li>
+                            <li>🎯 Decision-making insights</li>
+                        </ul>
+                        <div class="tip">
+                            <strong>💡 Tip:</strong> Start with the root node to understand how the tree begins its classification process!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Remove the modal HTML since we're not using it anymore -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

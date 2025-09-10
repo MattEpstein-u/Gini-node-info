@@ -1,0 +1,696 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.tree-section {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.info-panel {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    position: sticky;
+    top: 20px;
+}
+
+.panel-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 20px 20px 0 0;
+}
+
+.panel-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.5rem;
+}
+
+.panel-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.panel-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* Decision Tree Visualization */
+.tree-container {
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 20px;
+    min-height: 500px;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+}
+
+/* Tree Level Layout */
+.tree-level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    gap: 40px;
+    position: relative;
+}
+
+/* Bubble Nodes */
+.tree-node.bubble {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    border: 4px solid;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.tree-node.bubble:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+}
+
+/* Root Node */
+.tree-node.root-node {
+    background: radial-gradient(circle at 30% 30%, #667eea, #764ba2);
+    border-color: #4c51bf;
+    color: white;
+    width: 160px;
+    height: 160px;
+}
+
+/* Decision Nodes */
+.tree-node.decision-node {
+    background: radial-gradient(circle at 30% 30%, #4299e1, #3182ce);
+    border-color: #2b6cb0;
+    color: white;
+}
+
+/* Leaf Nodes */
+.tree-node.leaf-node.setosa {
+    background: radial-gradient(circle at 30% 30%, #48bb78, #38a169);
+    border-color: #2f855a;
+    color: white;
+}
+
+.tree-node.leaf-node.versicolor {
+    background: radial-gradient(circle at 30% 30%, #ed8936, #dd6b20);
+    border-color: #c05621;
+    color: white;
+}
+
+.tree-node.leaf-node.virginica {
+    background: radial-gradient(circle at 30% 30%, #e53e3e, #c53030);
+    border-color: #9b2c2c;
+    color: white;
+}
+
+/* Node Content */
+.node-content {
+    padding: 10px;
+    line-height: 1.3;
+}
+
+.condition {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.species {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.node-stats {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Branch Container System */
+.branch-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    position: relative;
+    margin: 10px 0;
+}
+
+.branch-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 140px;
+}
+
+.branch-container .spacer {
+    width: 140px;
+    visibility: hidden;
+}
+
+/* Branch Lines */
+.branch-line {
+    width: 3px;
+    height: 50px;
+    background: linear-gradient(to bottom, #4a5568, #718096);
+    border-radius: 2px;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+/* Left branch - diagonal left */
+.left-branch {
+    transform: rotate(25deg);
+    transform-origin: top center;
+}
+
+/* Right branch - diagonal right */
+.right-branch {
+    transform: rotate(-25deg);
+    transform-origin: top center;
+}
+
+/* Branch line arrows */
+.branch-line::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid #718096;
+}
+
+/* Branch Labels */
+.branch-label {
+    background: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    z-index: 3;
+    position: relative;
+}
+
+.true-label {
+    color: #38a169;
+    border-color: #38a169;
+    background: #f0fff4;
+}
+
+.false-label {
+    color: #e53e3e;
+    border-color: #e53e3e;
+    background: #fef5e7;
+}
+
+/* Level-specific branch positioning */
+.level-0-to-1 {
+    justify-content: center;
+    gap: 100px;
+}
+
+.level-1-to-2 {
+    justify-content: flex-end;
+    gap: 60px;
+    padding-right: 50px;
+}
+
+.level-2-to-3 {
+    justify-content: center;
+    gap: 60px;
+    padding-left: 50px;
+}
+
+/* Spacer for alignment */
+.spacer-node {
+    width: 140px;
+    height: 140px;
+    visibility: hidden;
+}
+
+/* Level-specific adjustments */
+.level-1 {
+    gap: 60px;
+}
+
+.level-2 {
+    gap: 50px;
+}
+
+.level-3 {
+    gap: 40px;
+}
+
+/* Selected Node Highlighting */
+.tree-node.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3);
+    z-index: 10;
+    position: relative;
+}
+
+/* Add diagonal connecting lines */
+.tree-container {
+    position: relative;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    main {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .info-panel {
+        position: static;
+        max-height: none;
+        order: 2;
+    }
+    
+    .tree-section {
+        order: 1;
+    }
+    
+    .tree-level {
+        gap: 35px;
+    }
+    
+    .level-1 {
+        gap: 70px;
+    }
+    
+    .level-2 {
+        gap: 50px;
+    }
+    
+    .level-3 {
+        gap: 40px;
+    }
+    
+    .tree-node.bubble {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .tree-node.root-node {
+        width: 140px;
+        height: 140px;
+    }
+    
+    /* Adjust branch containers for tablet */
+    .level-0-to-1 {
+        gap: 140px;
+    }
+    
+    .level-1-to-2 {
+        gap: 60px;
+        padding-right: 50px;
+    }
+    
+    .level-2-to-3 {
+        gap: 60px;
+        padding-left: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5rem;
+    }
+    
+    body {
+        padding: 10px;
+    }
+    
+    .tree-section,
+    .info-panel {
+        padding: 20px;
+    }
+    
+    .panel-header {
+        padding: 20px;
+    }
+    
+    .panel-content {
+        padding: 20px;
+    }
+    
+    .tree-container {
+        padding: 15px 10px;
+        overflow: visible;
+    }
+    
+    .tree-level {
+        gap: 25px;
+    }
+    
+    .level-1 {
+        gap: 50px;
+    }
+    
+    .level-2 {
+        gap: 35px;
+    }
+    
+    .level-3 {
+        gap: 30px;
+    }
+    
+    .tree-node.bubble {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .tree-node.root-node {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .condition, .species {
+        font-size: 0.8rem;
+    }
+    
+    .node-stats {
+        font-size: 0.6rem;
+    }
+    
+    .branch-label {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+    }
+    
+    .distribution-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .class-name {
+        min-width: auto;
+    }
+    
+    .bar-container {
+        width: 100%;
+    }
+    
+    /* Adjust branch containers for mobile */
+    .branch-container {
+        height: 50px;
+    }
+    
+    .branch-line {
+        height: 40px;
+    }
+    
+    .branch-group {
+        width: 100px;
+    }
+    
+    .level-0-to-1 {
+        gap: 100px;
+    }
+    
+    .level-1-to-2 {
+        gap: 50px;
+        padding-right: 30px;
+    }
+    
+    .level-2-to-3 {
+        gap: 50px;
+        padding-left: 30px;
+    }
+    
+    .branch-container .spacer {
+        width: 100px;
+    }
+}
+
+/* Welcome Message Styles */
+.welcome-message {
+    text-align: center;
+    color: #4a5568;
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.welcome-message h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.welcome-message p {
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.welcome-message ul {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.welcome-message li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.tip {
+    background: #f0fff4;
+    border: 2px solid #38a169;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 25px;
+    color: #1a202c;
+}
+
+/* Node Info Styles */
+.node-info {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border-left: 4px solid #667eea;
+}
+
+.node-info h3 {
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.node-info p {
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+.class-distribution {
+    margin-bottom: 30px;
+}
+
+.class-distribution h3 {
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.distribution-bars {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.distribution-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.class-name {
+    font-weight: bold;
+    min-width: 100px;
+    font-size: 0.9rem;
+}
+
+.bar-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bar {
+    height: 20px;
+    border-radius: 10px;
+    min-width: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bar-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4a5568;
+    min-width: 70px;
+}
+
+.gini-calculation {
+    background: #fef5e7;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #ed8936;
+}
+
+.gini-calculation h3 {
+    color: #c05621;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.explanation {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-style: italic;
+    border-left: 3px solid #ed8936;
+    font-size: 0.9rem;
+}
+
+.formula {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-family: 'Courier New', monospace;
+    border: 2px solid #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.calculation-steps {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.calculation-steps h4 {
+    color: #4a5568;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.calculation-steps ol {
+    padding-left: 15px;
+}
+
+.calculation-steps li {
+    margin-bottom: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.final-result {
+    background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid #38b2ac;
+}
+
+.final-result strong {
+    font-size: 1.1rem;
+    color: #234e52;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.gini-interpretation {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+/* Selected Node Highlighting */
+.tree-node.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3);
+    z-index: 10;
+    position: relative;
+}
